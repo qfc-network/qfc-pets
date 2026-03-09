@@ -1,0 +1,9 @@
+{
+  "contract": "QFCPets",
+  "address": "0x960c7E2Eac4b1b701bF2Fa07379140F9dbAB739e",
+  "deployer": "0x5BE349d95787b0B4135CC4CfEe27AD70AC9F3132",
+  "txHash": "0x2e506782f6d819ca100b49c3cc14b7098bf3fcee6e36a794300292784a4d7055",
+  "chainId": 9000,
+  "rpc": "https://rpc.testnet.qfc.network",
+  "deployedAt": "2026-03-09T23:50:28.043Z"
+}
