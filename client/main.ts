@@ -6,11 +6,9 @@ import { renderChatView } from './ChatView';
 import { renderBreedView } from './BreedView';
 import { renderBattleView } from './BattleView';
 import {
-  connectWallet as chainConnect,
-  connectWithKey,
   getWalletState,
-  getChainInfo,
   mintPetOnChain,
+  initChainUI,
 } from './chain';
 
 type View = 'home' | 'detail' | 'chat' | 'breed' | 'battle';
@@ -150,39 +148,8 @@ function renderHome(container: HTMLElement) {
   container.appendChild(grid);
 }
 
-// ── Chain integration ──────────────────────────────
-async function loadChainInfo(): Promise<void> {
-  try {
-    const info = await getChainInfo();
-    const el = document.getElementById("chain-block");
-    if (el) el.textContent = `#${info.blockNumber}`;
-  } catch {}
-}
-
-async function handleConnectWallet(): Promise<void> {
-  const btnEl = document.getElementById("btn-connect-wallet")!;
-  try {
-    if (typeof (window as any).ethereum !== "undefined") {
-      await chainConnect();
-    } else {
-      const key = prompt("No MetaMask detected.\nEnter testnet private key (0x...):");
-      if (!key) return;
-      await connectWithKey(key);
-    }
-    const ws = getWalletState();
-    if (!ws.connected || !ws.address) return;
-    document.getElementById("wallet-addr")!.textContent = ws.address.slice(0, 6) + "..." + ws.address.slice(-4);
-    document.getElementById("wallet-bal")!.textContent = parseFloat(ws.balance || "0").toFixed(2);
-    document.getElementById("wallet-info")!.style.display = "inline";
-    btnEl.textContent = "✅ Connected";
-    (btnEl as HTMLButtonElement).style.background = "#1a3a1a";
-  } catch (err: any) {
-    alert("Wallet connection failed: " + (err.message || err));
-  }
-}
-
-document.getElementById("btn-connect-wallet")?.addEventListener("click", handleConnectWallet);
-loadChainInfo();
+// ── Chain integration (wallet UI via SDK) ──────────
+initChainUI();
 
 // Make chain functions available to sub-views
 (window as any).__qfcChain = { getWalletState, mintPetOnChain };
