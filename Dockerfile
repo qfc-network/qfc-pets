@@ -12,6 +12,6 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/server ./server
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 EXPOSE 3230
 CMD ["npx", "tsx", "server/index.ts"]
